@@ -1,22 +1,26 @@
-const path = require('path');
-
-const http = require('http');
-const bodyParser = require('body-parser');
 const express = require('express');
+const http = require('http');
+const path = require('path');
+const bodyParser = require('body-parser');  // To Save Product Entered
+
+// To import Routes
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+const contactusRoutes = require('./routes/contactus');
+const successRoutes = require('./routes/success');
+const errorControllers = require('./controllers/error'); // Imported Controllers from error controllers
 
 const app = express();
 
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
 app.use(express.static(path.join(__dirname,'public')));
-
 app.use(bodyParser.urlencoded({extended:false}));
 
+// Used Imported Routes
 app.use(shopRoutes);
 app.use('/admin',adminRoutes);
+app.use(contactusRoutes);
+app.use(successRoutes);
 
-app.use((req,res,next) =>{
-    res.status(404).sendFile(path.join(__dirname , 'views','404.html'));
-})
+app.use(errorControllers.get404); // Used Imported Controller
 
-app.listen(4000);
+app.listen(5000);
